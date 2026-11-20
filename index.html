@@ -1,0 +1,282 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Calculadora solar para estimar generación fotovoltaica, autoconsumo, baterías, ahorro y retorno de inversión en Colombia.">
+  <meta name="theme-color" content="#101b32">
+  <title>Calculadora Solar Colombia | SolarCalc</title>
+  <style>
+    :root{--navy:#101b32;--navy2:#172642;--ink:#19243a;--muted:#68758d;--line:#e4e9f1;--bg:#f4f7fb;--white:#fff;--gold:#f5b82e;--gold2:#ffcf63;--green:#16836a;--blue:#3f77c8;--red:#b65353;--shadow:0 14px 35px rgba(17,34,62,.08)}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif}
+    .top{background:linear-gradient(125deg,#0e1930,#1c3154 68%,#25416b);color:#fff;padding:27px 22px 76px;position:relative;overflow:hidden}
+    .top:after{content:"";position:absolute;width:390px;height:390px;border-radius:50%;background:radial-gradient(circle,rgba(245,184,46,.19),rgba(245,184,46,0) 68%);right:-70px;top:-200px}
+    .nav,.hero,.wrap{max-width:1180px;margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;gap:16px;position:relative;z-index:1}
+    .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.2px}.brandmark{width:37px;height:37px;border-radius:12px;background:var(--gold);display:grid;place-items:center;color:#18243a;font-size:22px;font-weight:900}
+    .navtag{font-size:12px;color:#d5deec;border:1px solid rgba(255,255,255,.22);padding:6px 10px;border-radius:30px}
+    .hero{padding-top:35px;position:relative;z-index:1}.eyebrow{color:var(--gold2);font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:1.6px}.hero h1{margin:8px 0 8px;font-size:clamp(29px,4vw,43px);line-height:1.12;letter-spacing:-1.3px}.hero p{margin:0;color:#d3ddec;max-width:690px;font-size:16px}
+    .wrap{padding:0 20px 42px;margin-top:-42px;position:relative;z-index:2}.layout{display:grid;grid-template-columns:minmax(310px,390px) minmax(0,1fr);gap:20px;align-items:start}
+    .panel,.card{background:var(--white);border:1px solid var(--line);border-radius:17px;box-shadow:var(--shadow)}.panel{padding:20px;position:sticky;top:14px}.panel h2{font-size:18px;margin:0 0 4px}.sub{font-size:12px;color:var(--muted);margin:0 0 18px}
+    .section{padding-top:16px;margin-top:15px;border-top:1px solid var(--line)}.section:first-of-type{border-top:0;padding-top:0;margin-top:0}.section h3{margin:0 0 12px;font-size:13px;letter-spacing:.5px;text-transform:uppercase;color:#51617b}
+    .field{margin:0 0 13px}.field label{display:flex;justify-content:space-between;gap:10px;font-size:12px;font-weight:700;color:#465570;margin-bottom:6px}.hint{font-weight:500;color:#8a95a8}.inputrow{display:flex;align-items:center;border:1px solid #dce3ed;border-radius:10px;background:#fff;overflow:hidden}.inputrow:focus-within{border-color:#7094cb;box-shadow:0 0 0 3px rgba(63,119,200,.1)}
+    input,select{font:inherit;color:var(--ink)}.inputrow input,.inputrow select{width:100%;min-width:0;border:0;outline:0;background:transparent;padding:10px 11px;font-size:14px}.unit{padding:0 10px;color:#7a879b;font-size:12px;white-space:nowrap;background:#f7f9fc;border-left:1px solid #e4e9f1;align-self:stretch;display:flex;align-items:center}
+    .toggleline{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:11px 12px;border:1px solid var(--line);border-radius:11px;background:#fbfcfe;margin:7px 0 13px}.toggleline strong{font-size:13px}.toggleline small{display:block;color:var(--muted);font-size:11px}.switch{position:relative;width:43px;height:24px;flex:0 0 auto}.switch input{opacity:0;width:0;height:0}.slider{position:absolute;inset:0;background:#cbd3df;border-radius:22px;cursor:pointer;transition:.2s}.slider:before{content:"";position:absolute;width:18px;height:18px;left:3px;top:3px;background:white;border-radius:50%;transition:.2s;box-shadow:0 1px 3px #8885}.switch input:checked+.slider{background:var(--green)}.switch input:checked+.slider:before{transform:translateX(19px)}
+    .results{display:grid;gap:16px}.cards{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}.metric{padding:16px 16px 14px;min-height:119px}.metric .kicker{font-size:11px;color:var(--muted);font-weight:700;letter-spacing:.3px}.metric .value{font-size:clamp(20px,2.2vw,27px);font-weight:850;letter-spacing:-.8px;margin:7px 0 1px;line-height:1.15}.metric .foot{font-size:11px;color:var(--muted)}.metric.primary{background:var(--navy2);color:#fff;border-color:var(--navy2)}.metric.primary .kicker,.metric.primary .foot{color:#c2cee0}
+    .card{padding:19px}.cardhead{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:14px}.card h2{margin:0;font-size:17px}.card p.desc{margin:3px 0 0;color:var(--muted);font-size:12px}.pill{border-radius:30px;padding:5px 9px;background:#edf4ff;color:#3868a8;font-size:11px;font-weight:800;white-space:nowrap}
+    .energygrid{display:grid;grid-template-columns:1fr 1fr;gap:12px}.energyitem{padding:13px;border:1px solid var(--line);border-radius:12px}.energyitem .name{font-size:11px;color:var(--muted);font-weight:700}.energyitem .num{font-size:20px;font-weight:800;margin:3px 0}.bar{height:9px;background:#edf1f6;border-radius:20px;overflow:hidden;margin-top:9px}.bar span{height:100%;display:block;border-radius:20px;background:var(--blue)}.energyitem:nth-child(2) .bar span{background:var(--green)}.energyitem:nth-child(3) .bar span{background:var(--gold)}.energyitem:nth-child(4) .bar span{background:#9aa6b7}
+    .equip{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}.equipbox{border:1px solid var(--line);border-radius:12px;padding:14px}.equipbox .ico{font-size:18px}.equipbox strong{display:block;font-size:19px;margin:5px 0 0}.equipbox span{font-size:11px;color:var(--muted)}
+    .economy{display:grid;grid-template-columns:1fr 1fr;gap:16px}.economy .card{height:100%}.statrow{display:flex;justify-content:space-between;gap:12px;padding:9px 0;border-bottom:1px solid #edf0f5;font-size:13px}.statrow:last-child{border:0}.statrow span:first-child{color:var(--muted)}.statrow strong{text-align:right}.good{color:var(--green)}.warn{color:#a66c12}
+    .actions{display:flex;flex-wrap:wrap;gap:9px}.btn{border:0;border-radius:10px;padding:10px 14px;font-weight:800;font-size:12px;cursor:pointer;transition:.15s}.btn:hover{transform:translateY(-1px)}.btn.dark{background:var(--navy2);color:#fff}.btn.light{background:#eff3f8;color:#34445f}.note{font-size:11px;color:var(--muted);line-height:1.55;margin:0}.disclaimer{border-left:3px solid var(--gold);background:#fff9e9;padding:12px 14px;border-radius:0 10px 10px 0;font-size:11px;color:#6c5b36}
+    footer{max-width:1180px;padding:0 20px 28px;margin:auto;display:flex;justify-content:space-between;gap:14px;flex-wrap:wrap;color:#8a95a8;font-size:11px}
+    @media(max-width:980px){.layout{grid-template-columns:1fr}.panel{position:static}.cards{grid-template-columns:repeat(2,1fr)}}
+    @media(max-width:620px){.top{padding:20px 17px 66px}.hero{padding-top:27px}.wrap{padding:0 12px 30px}.layout{gap:13px}.panel,.card{padding:16px}.cards{gap:9px}.metric{padding:13px;min-height:108px}.energygrid,.economy{grid-template-columns:1fr}.equip{grid-template-columns:1fr 1fr}.navtag{display:none}}
+    @media print{body{background:#fff}.top{padding-bottom:30px}.wrap{margin-top:0}.layout{grid-template-columns:1fr}.panel{position:static}.actions,.navtag{display:none!important}.panel,.card{box-shadow:none;break-inside:avoid}.top{print-color-adjust:exact;-webkit-print-color-adjust:exact}}
+  </style>
+</head>
+<body>
+  <header class="top">
+    <div class="nav">
+      <div class="brand"><div class="brandmark">☀</div><span>SOLARCALC <span style="font-weight:500;color:#c5d1e2">COLOMBIA</span></span></div>
+      <div class="navtag">Pre-dimensionamiento fotovoltaico</div>
+    </div>
+    <div class="hero">
+      <div class="eyebrow">Energía solar · Evaluación técnica y financiera</div>
+      <h1>Calcula tu sistema solar.</h1>
+      <p>Estima generación, autoconsumo, almacenamiento, ahorro y recuperación de la inversión. Ajusta los datos a tu vivienda o proyecto.</p>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="layout">
+      <aside class="panel">
+        <h2>Parámetros del proyecto</h2>
+        <p class="sub">Modifica los campos; los resultados se actualizan automáticamente.</p>
+
+        <div class="section">
+          <h3>1 · Ubicación y consumo</h3>
+          <div class="field"><label for="location">Ubicación <span class="hint">Municipio / departamento</span></label><div class="inputrow"><input id="location" type="text" value="Mariquita, Tolima"></div></div>
+          <div class="field"><label for="consumption">Consumo mensual <span class="hint">Factura de energía</span></label><div class="inputrow"><input id="consumption" type="number" min="0" step="1" value="1000"><span class="unit">kWh/mes</span></div></div>
+          <div class="field"><label for="tariff">Tarifa de energía</label><div class="inputrow"><span class="unit">COP</span><input id="tariff" type="number" min="0" step="1" value="950"><span class="unit">/kWh</span></div></div>
+        </div>
+
+        <div class="section">
+          <h3>2 · Generación fotovoltaica</h3>
+          <div class="field"><label for="pv">Potencia de paneles</label><div class="inputrow"><input id="pv" type="number" min="0.1" step="0.1" value="12"><span class="unit">kWp</span></div></div>
+          <div class="field"><label for="panelW">Potencia por panel</label><div class="inputrow"><input id="panelW" type="number" min="100" step="5" value="600"><span class="unit">Wp</span></div></div>
+          <div class="field"><label for="sun">Horas solares pico promedio</label><div class="inputrow"><input id="sun" type="number" min="0.1" max="10" step="0.1" value="4.5"><span class="unit">h/día</span></div></div>
+          <div class="field"><label for="pr">Rendimiento global del sistema <span class="hint">PR</span></label><div class="inputrow"><input id="pr" type="number" min="40" max="100" step="1" value="80"><span class="unit">%</span></div></div>
+          <div class="field"><label for="inverter">Potencia nominal del inversor</label><div class="inputrow"><input id="inverter" type="number" min="0.1" step="0.1" value="10"><span class="unit">kW AC</span></div></div>
+          <div class="field"><label for="acType">Conexión eléctrica AC</label><div class="inputrow"><select id="acType"><option selected>Trifásico 220 V</option><option>Monofásico 120/240 V</option><option>Trifásico 208/120 V</option><option>Trifásico 440 V</option></select></div></div>
+        </div>
+
+        <div class="section">
+          <h3>3 · Autoconsumo y red</h3>
+          <div class="field"><label for="direct">Autoconsumo directo sin batería <span class="hint">Parte de la generación</span></label><div class="inputrow"><input id="direct" type="number" min="0" max="100" step="1" value="45"><span class="unit">%</span></div></div>
+          <div class="toggleline"><div><strong>Inyección cero</strong><small>El excedente no se entrega a la red</small></div><label class="switch"><input id="zeroExport" type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="field" id="exportPriceField"><label for="exportPrice">Reconocimiento de excedentes</label><div class="inputrow"><span class="unit">COP</span><input id="exportPrice" type="number" min="0" step="1" value="250"><span class="unit">/kWh</span></div></div>
+        </div>
+
+        <div class="section">
+          <h3>4 · Almacenamiento</h3>
+          <div class="field"><label for="battery">Capacidad nominal de batería</label><div class="inputrow"><select id="battery"><option value="0">Sin batería</option><option value="11.8" selected>11,8 kWh</option><option value="23.6">23,6 kWh</option><option value="custom">Personalizada</option></select></div></div>
+          <div class="field" id="customBatteryField" style="display:none"><label for="customBattery">Capacidad personalizada</label><div class="inputrow"><input id="customBattery" type="number" min="0" step="0.1" value="15"><span class="unit">kWh</span></div></div>
+          <div class="field"><label for="dod">Profundidad máxima de descarga</label><div class="inputrow"><input id="dod" type="number" min="1" max="100" step="1" value="80"><span class="unit">%</span></div></div>
+          <div class="field"><label for="eff">Eficiencia de ciclo de batería</label><div class="inputrow"><input id="eff" type="number" min="1" max="100" step="1" value="90"><span class="unit">%</span></div></div>
+          <div class="field"><label for="cycles">Ciclos equivalentes al año</label><div class="inputrow"><input id="cycles" type="number" min="0" max="365" step="1" value="300"><span class="unit">ciclos/año</span></div></div>
+          <div class="field"><label for="criticalLoad">Carga crítica promedio</label><div class="inputrow"><input id="criticalLoad" type="number" min="0.1" step="0.1" value="1"><span class="unit">kW</span></div></div>
+        </div>
+
+        <div class="section">
+          <h3>5 · Evaluación financiera</h3>
+          <div class="field"><label for="capex">Inversión total instalada <span class="hint">Dato cotizado</span></label><div class="inputrow"><span class="unit">COP</span><input id="capex" type="number" min="0" step="100000" value="0"></div></div>
+          <div class="field"><label for="om">Operación y mantenimiento anual</label><div class="inputrow"><input id="om" type="number" min="0" max="20" step="0.1" value="1"><span class="unit">% inversión</span></div></div>
+          <div class="field"><label for="degradation">Degradación anual de paneles</label><div class="inputrow"><input id="degradation" type="number" min="0" max="5" step="0.1" value="0.5"><span class="unit">%</span></div></div>
+          <div class="field"><label for="tariffGrowth">Incremento anual de tarifa</label><div class="inputrow"><input id="tariffGrowth" type="number" min="0" max="30" step="0.1" value="5"><span class="unit">%</span></div></div>
+          <div class="field"><label for="discount">Tasa de descuento</label><div class="inputrow"><input id="discount" type="number" min="0" max="50" step="0.1" value="10"><span class="unit">%</span></div></div>
+        </div>
+      </aside>
+
+      <section class="results" aria-live="polite">
+        <div class="cards">
+          <div class="card metric primary"><div class="kicker">Generación estimada</div><div class="value" id="monthlyGen">—</div><div class="foot" id="annualGen">— al año</div></div>
+          <div class="card metric"><div class="kicker">Cobertura del consumo</div><div class="value" id="coverage">—</div><div class="foot">Energía solar usada / consumo</div></div>
+          <div class="card metric"><div class="kicker">Ahorro estimado</div><div class="value" id="monthlySaving">—</div><div class="foot" id="annualSaving">— al año</div></div>
+          <div class="card metric"><div class="kicker">Recuperación simple</div><div class="value" id="payback">—</div><div class="foot">Según inversión y ahorro neto</div></div>
+        </div>
+
+        <div class="card">
+          <div class="cardhead"><div><h2>Balance energético anual</h2><p class="desc">Estimación de cómo se utiliza la energía generada por los paneles.</p></div><span class="pill" id="zeroLabel">Inyección cero activa</span></div>
+          <div class="energygrid">
+            <div class="energyitem"><div class="name">Autoconsumo directo</div><div class="num" id="directEnergy">—</div><div class="bar"><span id="directBar" style="width:0"></span></div></div>
+            <div class="energyitem"><div class="name">Energía suministrada por batería</div><div class="num" id="batteryEnergy">—</div><div class="bar"><span id="batteryBar" style="width:0"></span></div></div>
+            <div class="energyitem"><div class="name">Excedentes a la red</div><div class="num" id="exportEnergy">—</div><div class="bar"><span id="exportBar" style="width:0"></span></div></div>
+            <div class="energyitem"><div class="name">Energía limitada / recortada</div><div class="num" id="curtailedEnergy">—</div><div class="bar"><span id="curtailedBar" style="width:0"></span></div></div>
+          </div>
+          <p class="note" style="margin-top:12px" id="energyNote">—</p>
+        </div>
+
+        <div class="card">
+          <div class="cardhead"><div><h2>Dimensionamiento preliminar</h2><p class="desc">Referencias básicas para revisar la configuración del sistema.</p></div><span class="pill">DC / AC</span></div>
+          <div class="equip">
+            <div class="equipbox"><div class="ico">▦</div><strong id="panelCount">—</strong><span>Paneles estimados</span></div>
+            <div class="equipbox"><div class="ico">ϟ</div><strong id="dcac">—</strong><span>Relación DC/AC</span></div>
+            <div class="equipbox"><div class="ico">▤</div><strong id="usableBattery">—</strong><span>Energía útil de batería</span></div>
+            <div class="equipbox"><div class="ico">◷</div><strong id="autonomy">—</strong><span>Autonomía teórica a carga crítica</span></div>
+            <div class="equipbox"><div class="ico">⌂</div><strong id="monthlyUse">—</strong><span>Consumo diario promedio</span></div>
+            <div class="equipbox"><div class="ico">⌁</div><strong id="annualRatio">—</strong><span>Generación / consumo anual</span></div>
+            <div class="equipbox"><div class="ico">⌗</div><strong id="acConfig">—</strong><span>Conexión del inversor</span></div>
+          </div>
+        </div>
+
+        <div class="economy">
+          <div class="card">
+            <div class="cardhead"><div><h2>Resultado económico</h2><p class="desc">Ahorro por energía autoconsumida y excedentes.</p></div></div>
+            <div class="statrow"><span>Factura actual estimada</span><strong id="currentBill">—</strong></div>
+            <div class="statrow"><span>Factura residual estimada*</span><strong id="residualBill">—</strong></div>
+            <div class="statrow"><span>Valor de excedentes</span><strong id="exportValue">—</strong></div>
+            <div class="statrow"><span>Ahorro bruto anual</span><strong id="grossSaving">—</strong></div>
+            <div class="statrow"><span>O&M anual estimado</span><strong id="omCost">—</strong></div>
+            <div class="statrow"><span>Ahorro neto del primer año</span><strong id="netSaving" class="good">—</strong></div>
+          </div>
+          <div class="card">
+            <div class="cardhead"><div><h2>Retorno a 25 años</h2><p class="desc">Flujo simplificado con degradación y aumento de tarifa.</p></div></div>
+            <div class="statrow"><span>Inversión ingresada</span><strong id="investment">—</strong></div>
+            <div class="statrow"><span>Valor presente neto (VPN)</span><strong id="npv">—</strong></div>
+            <div class="statrow"><span>TIR estimada</span><strong id="irr">—</strong></div>
+            <div class="statrow"><span>Retorno acumulado / inversión</span><strong id="roi">—</strong></div>
+            <div class="statrow"><span>Horizonte de análisis</span><strong>25 años</strong></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardhead"><div><h2>Acciones y supuestos</h2><p class="desc">Guarda la simulación en PDF o descarga sus parámetros.</p></div></div>
+          <div class="actions"><button class="btn dark" id="printBtn" type="button">Imprimir / Guardar PDF</button><button class="btn light" id="csvBtn" type="button">Descargar resultados CSV</button><button class="btn light" id="resetBtn" type="button">Restablecer valores</button></div>
+          <p class="note" style="margin-top:13px">* La factura residual es una aproximación energética y no replica todos los componentes, cargos fijos, contribuciones, impuestos ni reglas de liquidación del comercializador.</p>
+          <div class="disclaimer" style="margin-top:13px"><strong>Importante:</strong> esta herramienta entrega una prefactibilidad, no un diseño eléctrico ni una cotización. La generación depende de radiación real, orientación, inclinación, sombras, temperatura, pérdidas, disponibilidad de red y configuración del inversor. Verifica el recurso solar local y la regulación aplicable antes de comprar equipos o ejecutar la instalación.</div>
+        </div>
+      </section>
+    </div>
+  </main>
+  <footer><span>SolarCalc Colombia · Calculadora preliminar fotovoltaica</span><span>Moneda: pesos colombianos (COP) · Unidades SI</span></footer>
+
+<script>
+(() => {
+  const ids = ['location','consumption','tariff','pv','panelW','sun','pr','inverter','acType','direct','zeroExport','exportPrice','battery','customBattery','dod','eff','cycles','criticalLoad','capex','om','degradation','tariffGrowth','discount'];
+  const defaults = {};
+  ids.forEach(id => { const el = document.getElementById(id); defaults[id] = el.type === 'checkbox' ? el.checked : el.value; });
+  const $ = id => document.getElementById(id);
+  const n = id => Math.max(0, Number($(id).value) || 0);
+  const fmt = (v, decimals=0) => new Intl.NumberFormat('es-CO',{maximumFractionDigits:decimals,minimumFractionDigits:decimals}).format(Number.isFinite(v)?v:0);
+  const cop = v => '$ ' + fmt(v,0);
+  const pct = v => fmt(v,1) + '%';
+  const clamp = (v,min,max) => Math.min(max,Math.max(min,v));
+
+  function calculate(){
+    const consumption = n('consumption') * 12;
+    const tariff = n('tariff');
+    const pv = n('pv');
+    const panelW = Math.max(1,n('panelW'));
+    const sun = n('sun');
+    const pr = clamp(n('pr')/100,0,1);
+    const inverter = n('inverter');
+    const directShare = clamp(n('direct')/100,0,1);
+    const zero = $('zeroExport').checked;
+    const exportPrice = zero ? 0 : n('exportPrice');
+    let battery = $('battery').value === 'custom' ? n('customBattery') : Number($('battery').value);
+    const dod = clamp(n('dod')/100,0,1);
+    const eff = clamp(n('eff')/100,0,1);
+    const cycles = n('cycles');
+    const criticalLoad = n('criticalLoad');
+    const capex = n('capex');
+    const omRate = n('om')/100;
+    const degradation = n('degradation')/100;
+    const tariffGrowth = n('tariffGrowth')/100;
+    const discount = n('discount')/100;
+
+    const generation = pv * sun * 365 * pr;
+    const direct = Math.min(consumption, generation * directShare);
+    const surplusAfterDirect = Math.max(0,generation-direct);
+    const residualLoad = Math.max(0,consumption-direct);
+    const maxBatteryChargePerYear = battery * dod * cycles;
+    const batteryDischarge = battery > 0 ? Math.min(residualLoad, surplusAfterDirect*eff, maxBatteryChargePerYear*eff) : 0;
+    const batteryCharge = eff > 0 ? batteryDischarge/eff : 0;
+    const exportAvailable = Math.max(0,surplusAfterDirect-batteryCharge);
+    const exported = zero ? 0 : exportAvailable;
+    const curtailed = zero ? exportAvailable : 0;
+    const selfUse = direct+batteryDischarge;
+    const selfUseCoverage = consumption > 0 ? selfUse/consumption*100 : 0;
+    const genConsumptionRatio = consumption > 0 ? generation/consumption*100 : 0;
+    const directBar = generation > 0 ? direct/generation*100 : 0;
+    const batteryBar = generation > 0 ? batteryCharge/generation*100 : 0;
+    const exportBar = generation > 0 ? exported/generation*100 : 0;
+    const curtailedBar = generation > 0 ? curtailed/generation*100 : 0;
+    const bill = consumption*tariff;
+    const residualBill = Math.max(0,consumption-selfUse)*tariff;
+    const exportCredit = exported*exportPrice;
+    const grossSaving = selfUse*tariff+exportCredit;
+    const omCost = capex*omRate;
+    const netSaving = grossSaving-omCost;
+    const paybackYears = netSaving > 0 && capex > 0 ? capex/netSaving : null;
+    const panelCount = Math.ceil(pv*1000/panelW);
+    const dcac = inverter > 0 ? pv/inverter : null;
+    const usable = battery*dod*eff;
+    const autonomy = criticalLoad > 0 ? usable/criticalLoad : null;
+
+    let cum= -capex, npv= -capex, payback=null, totalUndiscounted=0;
+    const flows=[];
+    for(let year=1;year<=25;year++){
+      const degradationFactor=Math.pow(1-degradation,year-1);
+      const tariffFactor=Math.pow(1+tariffGrowth,year-1);
+      const selfKwh=(selfUse*degradationFactor);
+      const exportKwh=(exported*degradationFactor);
+      const yearGross=selfKwh*tariff*tariffFactor+exportKwh*exportPrice*tariffFactor;
+      const yearOm=omCost;
+      const flow=yearGross-yearOm;
+      flows.push(flow);
+      npv += flow/Math.pow(1+discount,year);
+      totalUndiscounted += flow;
+      const previous=cum; cum+=flow;
+      if(payback===null && cum>=0 && flow>0){ payback=year-1+(0-previous)/flow; }
+    }
+    let irr=null;
+    if(capex>0){
+      const npvAt = rate => -capex+flows.reduce((s,f,i)=>s+f/Math.pow(1+rate,i+1),0);
+      let lo=-0.9, hi=5, fLo=npvAt(lo), fHi=npvAt(hi);
+      if(fLo===0) irr=lo;
+      else if(fHi===0) irr=hi;
+      else if(fLo*fHi<0){
+        for(let i=0;i<100;i++){const mid=(lo+hi)/2;const fm=npvAt(mid);if(fLo*fm<=0){hi=mid;fHi=fm}else{lo=mid;fLo=fm}}
+        irr=(lo+hi)/2;
+      }
+    }
+    const roi=capex>0?(totalUndiscounted-capex)/capex*100:null;
+    const dailyConsumption=consumption/365;
+
+    $('monthlyGen').textContent=fmt(generation/12)+' kWh'; $('annualGen').textContent=fmt(generation)+' kWh al año';
+    $('coverage').textContent=pct(clamp(selfUseCoverage,0,100));
+    $('monthlySaving').textContent=cop(grossSaving/12); $('annualSaving').textContent=cop(grossSaving)+' al año';
+    $('payback').textContent=paybackYears!==null?fmt(paybackYears,1)+' años':'—';
+    $('directEnergy').textContent=fmt(direct)+' kWh'; $('batteryEnergy').textContent=fmt(batteryDischarge)+' kWh'; $('exportEnergy').textContent=fmt(exported)+' kWh'; $('curtailedEnergy').textContent=fmt(curtailed)+' kWh';
+    $('directBar').style.width=clamp(directBar,0,100)+'%'; $('batteryBar').style.width=clamp(batteryBar,0,100)+'%'; $('exportBar').style.width=clamp(exportBar,0,100)+'%'; $('curtailedBar').style.width=clamp(curtailedBar,0,100)+'%';
+    $('zeroLabel').textContent=zero?'Inyección cero activa':'Excedentes a la red';
+    $('energyNote').textContent=zero ? 'Con inyección cero, el excedente que no se almacena se considera energía limitada. El modelo no asigna ingresos por energía exportada.' : 'El excedente después de cargar la batería se considera energía exportada y se valora con la tarifa de reconocimiento que ingresaste.';
+    $('panelCount').textContent=fmt(panelCount,0); $('dcac').textContent=dcac!==null?fmt(dcac,2)+' x':'—'; $('acConfig').textContent=$('acType').value; $('usableBattery').textContent=fmt(usable,1)+' kWh'; $('autonomy').textContent=autonomy!==null?fmt(autonomy,1)+' h':'—'; $('monthlyUse').textContent=fmt(dailyConsumption,1)+' kWh/día'; $('annualRatio').textContent=pct(genConsumptionRatio);
+    $('currentBill').textContent=cop(bill); $('residualBill').textContent=cop(residualBill); $('exportValue').textContent=cop(exportCredit); $('grossSaving').textContent=cop(grossSaving); $('omCost').textContent=cop(omCost); $('netSaving').textContent=cop(netSaving);
+    $('investment').textContent=cop(capex); $('npv').textContent=capex>0?cop(npv):'Ingresa inversión'; $('irr').textContent=irr!==null?pct(irr*100):(capex>0?'No calculable':'Ingresa inversión'); $('roi').textContent=roi!==null?pct(roi):'Ingresa inversión';
+    $('residualBill').className=''; $('netSaving').className=netSaving>=0?'good':'warn';
+    $('exportPriceField').style.opacity=zero?'.45':'1'; $('exportPrice').disabled=zero;
+    window.solarCalcLast={location:$('location').value,consumption,pv,sun,pr,generation,direct,batteryDischarge,exported,curtailed,selfUse,selfUseCoverage,coverage:clamp(selfUseCoverage,0,100),bill,residualBill,exportCredit,grossSaving,omCost,netSaving,capex,npv,irr,payback,paybackYears,panelCount,dcac,battery,usable,autonomy,flows,roi,tariff,zero};
+  }
+  function reset(){ids.forEach(id=>{const el=$(id); if(el.type==='checkbox')el.checked=defaults[id]; else el.value=defaults[id];});$('customBatteryField').style.display='none';calculate();}
+  function downloadCSV(){
+    const r=window.solarCalcLast; const rows=[['Concepto','Resultado'],['Ubicación',$('location').value],['Consumo anual (kWh)',r.consumption],['Potencia FV (kWp)',r.pv],['Generación anual (kWh)',r.generation],['Autoconsumo directo (kWh)',r.direct],['Energía suministrada por batería (kWh)',r.batteryDischarge],['Excedentes exportados (kWh)',r.exported],['Energía limitada (kWh)',r.curtailed],['Cobertura de consumo (%)',r.coverage],['Ahorro bruto anual (COP)',r.grossSaving],['O&M anual (COP)',r.omCost],['Ahorro neto año 1 (COP)',r.netSaving],['Inversión (COP)',r.capex],['VPN 25 años (COP)',r.npv],['TIR (%)',r.irr===null?'':r.irr*100],['Retorno simple (años)',r.paybackYears===null?'':r.paybackYears],['Número de paneles',r.panelCount]];
+    const csv='\uFEFF'+rows.map(row=>row.map(v=>'"'+String(v??'').replace(/"/g,'""')+'"').join(';')).join('\n');
+    const blob=new Blob([csv],{type:'text/csv;charset=utf-8;'});const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download='simulacion-solar-colombia.csv';a.click();URL.revokeObjectURL(url);
+  }
+  ids.forEach(id=>{$(id).addEventListener('input',()=>{if(id==='battery')$('customBatteryField').style.display=$('battery').value==='custom'?'block':'none';calculate();});$(id).addEventListener('change',()=>{if(id==='battery')$('customBatteryField').style.display=$('battery').value==='custom'?'block':'none';calculate();});});
+  $('printBtn').addEventListener('click',()=>window.print());$('csvBtn').addEventListener('click',downloadCSV);$('resetBtn').addEventListener('click',reset);
+  calculate();
+})();
+</script>
+</body>
+</html>
